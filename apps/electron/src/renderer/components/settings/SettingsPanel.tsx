@@ -1,0 +1,134 @@
+/**
+ * SettingsPanel - 设置面板
+ *
+ * 左侧导航 + 右侧 ScrollArea 内容区域。
+ * 四个标签页：通用 / 渠道配置 / 外观 / 关于
+ * 使用 Jotai atom 管理当前标签页状态。
+ */
+
+import * as React from 'react'
+import { useAtom, useAtomValue } from 'jotai'
+import { cn } from '@/lib/utils'
+import { Settings, Radio, Palette, Info, Plug, Globe, BookOpen, Wrench, MessageSquare, GraduationCap } from 'lucide-react'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { settingsTabAtom } from '@/atoms/settings-tab'
+import type { SettingsTab } from '@/atoms/settings-tab'
+import { appModeAtom } from '@/atoms/app-mode'
+import { hasUpdateAtom } from '@/atoms/updater'
+import { hasEnvironmentIssuesAtom } from '@/atoms/environment'
+import { ChannelSettings } from './ChannelSettings'
+import { GeneralSettings } from './GeneralSettings'
+import { ProxySettings } from './ProxySettings'
+import { AppearanceSettings } from './AppearanceSettings'
+import { AboutSettings } from './AboutSettings'
+import { AgentSettings } from './AgentSettings'
+import { PromptSettings } from './PromptSettings'
+import { ToolSettings } from './ToolSettings'
+import { FeishuSettings } from './FeishuSettings'
+import { TutorialViewer } from '../tutorial/TutorialViewer'
+
+/** 设置 Tab 定义 */
+interface TabItem {
+  id: SettingsTab
+  label: string
+  icon: React.ReactNode
+}
+
+/** 基础 Tabs（所有模式都有） */
+const BASE_TABS: TabItem[] = [
+  { id: 'general', label: '通用', icon: <Settings size={16} /> },
+  { id: 'channels', label: '渠道', icon: <Radio size={16} /> },
+  { id: 'prompts', label: '提示词', icon: <BookOpen size={16} /> },
+  { id: 'proxy', label: '代理', icon: <Globe size={16} /> },
+]
+
+/** Agent 模式专属 Tab */
+const AGENT_TAB: TabItem = { id: 'agent', label: '配置', icon: <Plug size={16} /> }
+const TOOLS_TAB: TabItem = { id: 'tools', label: '工具', icon: <Wrench size={16} /> }
+const FEISHU_TAB: TabItem = { id: 'feishu', label: '飞书', icon: <MessageSquare size={16} /> }
+const TUTORIAL_TAB: TabItem = { id: 'tutorial', label: '教程', icon: <GraduationCap size={16} /> }
+
+/** 尾部 Tabs */
+const TAIL_TABS: TabItem[] = [
+  { id: 'appearance', label: '外观', icon: <Palette size={16} /> },
+  { id: 'about', label: '关于', icon: <Info size={16} /> },
+]
+
+/** 根据标签页 id 渲染对应内容 */
+function renderTabContent(tab: SettingsTab): React.ReactElement {
+  switch (tab) {
+    case 'general':
+      return <GeneralSettings />
+    case 'channels':
+      return <ChannelSettings />
+    case 'prompts':
+      return <PromptSettings />
+    case 'proxy':
+      return <ProxySettings />
+    case 'agent':
+      return <AgentSettings />
+    case 'tools':
+      return <ToolSettings />
+    case 'appearance':
+      return <AppearanceSettings />
+    case 'about':
+      return <AboutSettings />
+    case 'feishu':
+      return <FeishuSettings />
+    case 'tutorial':
+      return <TutorialViewer />
+  }
+}
+
+export function SettingsPanel(): React.ReactElement {
+  const [activeTab, setActiveTab] = useAtom(settingsTabAtom)
+  const appMode = useAtomValue(appModeAtom)
+  const hasUpdate = useAtomValue(hasUpdateAtom)
+  const hasEnvironmentIssues = useAtomValue(hasEnvironmentIssuesAtom)
+
+  // Agent 模式时在渠道后插入 Agent Tab，工具 tab 两种模式都显示
+  const tabs = React.useMemo(() => {
+    if (appMode === 'agent') {
+      return [...BASE_TABS, AGENT_TAB, TOOLS_TAB, FEISHU_TAB, TUTORIAL_TAB, ...TAIL_TABS]
+    }
+    return [...BASE_TABS, TOOLS_TAB, FEISHU_TAB, TUTORIAL_TAB, ...TAIL_TABS]
+  }, [appMode])
+
+  return (
+    <div className="flex h-full">
+      {/* 左侧 Tab 导航 */}
+      <div className="w-[180px] border-r border-border/50 pt-14 px-2">
+        <h2 className="text-xs font-medium text-muted-foreground px-3 mb-2 uppercase tracking-wider">
+          设置
+        </h2>
+        <nav className="flex flex-col gap-1">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                'flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors',
+                activeTab === tab.id
+                  ? 'bg-muted text-foreground font-medium'
+                  : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+              )}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+              {tab.id === 'about' && (hasUpdate || hasEnvironmentIssues) && (
+                <span className="w-2 h-2 rounded-full bg-red-500" />
+              )}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* 右侧内容区域 */}
+      <ScrollArea className="flex-1 pt-14">
+        <div className="px-6 pb-6">
+          {renderTabContent(activeTab)}
+        </div>
+      </ScrollArea>
+    </div>
+  )
+}
