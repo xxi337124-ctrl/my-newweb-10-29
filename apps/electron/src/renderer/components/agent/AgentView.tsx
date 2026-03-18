@@ -58,7 +58,7 @@ import type { AgentContextStatus } from '@/atoms/agent-atoms'
 import { activeViewAtom } from '@/atoms/active-view'
 import { tabsAtom, splitLayoutAtom, openTab } from '@/atoms/tab-atoms'
 import { AgentSessionProvider } from '@/contexts/session-context'
-import type { AgentSendInput, AgentMessage, AgentPendingFile, ModelOption } from '@proma/shared'
+import type { AgentSendInput, AgentMessage, AgentPendingFile, ModelOption } from '@xwom/shared'
 import { fileToBase64 } from '@/lib/file-utils'
 
 export function AgentView({ sessionId }: { sessionId: string }): React.ReactElement {

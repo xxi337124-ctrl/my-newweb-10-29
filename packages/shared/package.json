@@ -1,8 +1,8 @@
 {
-  "name": "@proma/shared",
-  "version": "0.1.14",
+  "name": "@xwom/shared",
+  "version": "0.1.15",
   "license": "Apache-2.0",
-  "description": "Shared types, configs and utilities for proma",
+  "description": "Shared types, configs and utilities for xwom",
   "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

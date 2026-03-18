@@ -10,11 +10,11 @@ import { useAtom, useAtomValue } from 'jotai'
 import { Zap, Compass, Eye } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { agentPermissionModeAtom, currentAgentWorkspaceIdAtom, agentWorkspacesAtom } from '@/atoms/agent-atoms'
-import type { PromaPermissionMode } from '@proma/shared'
-import { PROMA_PERMISSION_MODE_ORDER } from '@proma/shared'
+import type { XwomPermissionMode } from '@xwom/shared'
+import { XWOM_PERMISSION_MODE_ORDER } from '@xwom/shared'
 
 /** 模式配置 */
-const MODE_CONFIG: Record<PromaPermissionMode, {
+const MODE_CONFIG: Record<XwomPermissionMode, {
   icon: React.ComponentType<{ className?: string }>
   label: string
   description: string
@@ -67,9 +67,9 @@ export function PermissionModeSelector(): React.ReactElement | null {
 
   /** 循环切换模式 */
   const cycleMode = React.useCallback(async () => {
-    const currentIndex = PROMA_PERMISSION_MODE_ORDER.indexOf(mode)
-    const nextIndex = (currentIndex + 1) % PROMA_PERMISSION_MODE_ORDER.length
-    const nextMode = PROMA_PERMISSION_MODE_ORDER[nextIndex]!
+    const currentIndex = XWOM_PERMISSION_MODE_ORDER.indexOf(mode)
+    const nextIndex = (currentIndex + 1) % XWOM_PERMISSION_MODE_ORDER.length
+    const nextMode = XWOM_PERMISSION_MODE_ORDER[nextIndex]!
 
     setMode(nextMode)
 

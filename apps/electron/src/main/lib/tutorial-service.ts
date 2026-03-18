@@ -10,7 +10,7 @@ import { randomUUID } from 'node:crypto'
 import { app } from 'electron'
 import { createConversation, appendMessage } from './conversation-manager'
 import { getConversationAttachmentsDir } from './config-paths'
-import type { ConversationMeta, FileAttachment, ChatMessage } from '@proma/shared'
+import type { ConversationMeta, FileAttachment, ChatMessage } from '@xwom/shared'
 
 /**
  * 获取教程文件路径
@@ -67,11 +67,11 @@ export function createWelcomeConversation(): ConversationMeta | null {
 
   try {
     // 1. 创建对话
-    const meta = createConversation('了解 Proma')
+    const meta = createConversation('了解 Xwom')
 
     // 2. 保存教程文件为附件
     const attachmentId = randomUUID()
-    const attachmentFilename = 'Proma 使用教程.md'
+    const attachmentFilename = 'Xwom 使用教程.md'
     const localPath = `${meta.id}/${attachmentId}.md`
     const dir = getConversationAttachmentsDir(meta.id)
     const fullPath = join(dir, `${attachmentId}.md`)
@@ -93,7 +93,7 @@ export function createWelcomeConversation(): ConversationMeta | null {
     const userMessage: ChatMessage = {
       id: randomUUID(),
       role: 'user',
-      content: '请帮我了解 Proma 的功能和使用方式，我附上了完整的使用教程作为参考。',
+      content: '请帮我了解 Xwom 的功能和使用方式，我附上了完整的使用教程作为参考。',
       createdAt: now,
       attachments: [attachment],
     }
@@ -103,17 +103,17 @@ export function createWelcomeConversation(): ConversationMeta | null {
     const assistantMessage: ChatMessage = {
       id: randomUUID(),
       role: 'assistant',
-      content: `你好，欢迎使用 Proma！我已经阅读了完整的使用教程。你可以向我提问来快速了解 Proma，比如：
+      content: `你好，欢迎使用 Xwom！我已经阅读了完整的使用教程。你可以向我提问来快速了解 Xwom，比如：
 
-- Proma 可以做什么？
+- Xwom 可以做什么？
 - 如何配置 AI 供应商渠道？
 - Chat 和 Agent 模式有什么区别？
 - 什么是 Skills 和 MCP？
-- 如何远程使用 Proma？
+- 如何远程使用 Xwom？
 
 直接输入你的问题并发送吧！`,
       createdAt: now + 1,
-      model: 'Proma',
+      model: 'Xwom',
     }
     appendMessage(meta.id, assistantMessage)
 

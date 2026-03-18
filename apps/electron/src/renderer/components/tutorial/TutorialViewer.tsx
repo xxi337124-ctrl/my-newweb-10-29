@@ -10,7 +10,7 @@ import * as React from 'react'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Loader2 } from 'lucide-react'
-import { CodeBlock } from '@proma/ui'
+import { CodeBlock } from '@xwom/ui'
 
 export function TutorialViewer(): React.ReactElement {
   const [content, setContent] = React.useState<string | null>(null)

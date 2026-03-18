@@ -14,7 +14,7 @@ import { join, dirname } from 'node:path'
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs'
 import { BrowserWindow } from 'electron'
 import type { WebContents } from 'electron'
-import { AGENT_IPC_CHANNELS } from '@proma/shared'
+import { AGENT_IPC_CHANNELS } from '@xwom/shared'
 import type {
   AgentSendInput,
   AgentGenerateTitleInput,
@@ -22,7 +22,7 @@ import type {
   AgentSaveWorkspaceFilesInput,
   AgentSavedFile,
   AgentStreamEvent,
-} from '@proma/shared'
+} from '@xwom/shared'
 import { ClaudeAgentAdapter } from './adapters/claude-agent-adapter'
 import { AgentEventBus } from './agent-event-bus'
 import { AgentOrchestrator } from './agent-orchestrator'

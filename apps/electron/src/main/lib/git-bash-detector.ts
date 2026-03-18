@@ -15,7 +15,7 @@
 import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
-import type { GitBashStatus } from '@proma/shared'
+import type { GitBashStatus } from '@xwom/shared'
 
 /**
  * Git for Windows 常见安装路径

@@ -10,7 +10,7 @@ import { ReactRenderer } from '@tiptap/react'
 import type { SuggestionOptions } from '@tiptap/suggestion'
 import { FileMentionList } from './FileMentionList'
 import type { FileMentionRef } from './FileMentionList'
-import type { FileIndexEntry } from '@proma/shared'
+import type { FileIndexEntry } from '@xwom/shared'
 import { createMentionPopup, positionPopup } from '@/components/agent/mention-popup-utils'
 
 /**

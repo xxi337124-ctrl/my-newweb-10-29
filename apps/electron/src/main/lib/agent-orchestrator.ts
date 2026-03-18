@@ -21,14 +21,24 @@ import { existsSync, mkdirSync, symlinkSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { createRequire } from 'node:module'
 import { app } from 'electron'
-import type { AgentSendInput, AgentEvent, AgentMessage, AgentGenerateTitleInput, AgentProviderAdapter, TypedError, RetryAttempt } from '@proma/shared'
-import { SAFE_TOOLS } from '@proma/shared'
-import type { PermissionRequest, PromaPermissionMode, AskUserRequest } from '@proma/shared'
+import type { AgentSendInput, AgentEvent, AgentMessage, AgentGenerateTitleInput, AgentProviderAdapter, TypedError, RetryAttempt } from '@xwom/shared'
+import { SAFE_TOOLS } from '@xwom/shared'
+import type { PermissionRequest, XwomPermissionMode, AskUserRequest } from '@xwom/shared'
+import {
+  extractApiError,
+  isAutoRetryableTypedError,
+  isAutoRetryableCatchError,
+  MAX_AUTO_RETRIES,
+  getRetryDelayMs,
+  timerWithAbort,
+  MAX_TOOL_SUMMARY_LENGTH,
+  extractToolSummary,
+} from './agent-orchestrator-utils'
 import type { ClaudeAgentQueryOptions } from './adapters/claude-agent-adapter'
 import { isPromptTooLongError, friendlyErrorMessage } from './adapters/claude-agent-adapter'
 import { AgentEventBus } from './agent-event-bus'
 import { decryptApiKey, getChannelById, listChannels } from './channel-manager'
-import { getAdapter, fetchTitle, normalizeAnthropicBaseUrlForSdk } from '@proma/core'
+import { getAdapter, fetchTitle, normalizeAnthropicBaseUrlForSdk } from '@xwom/core'
 import { getFetchFn } from './proxy-fetch'
 import { getEffectiveProxyUrl } from './proxy-settings-service'
 import { appendAgentMessage, updateAgentSessionMeta, getAgentSessionMeta, getAgentSessionMessages } from './agent-session-manager'
@@ -72,106 +82,7 @@ export interface SessionCallbacks {
 
 // ===== 工具函数 =====
 
-/**
- * 从 stderr 中提取 API 错误信息
- *
- * 解析类似这样的错误：
- * "401 {\"error\":{\"message\":\"...\"}}"
- * "API error: 400 Bad Request ..."
- */
-function extractApiError(stderr: string): { statusCode: number; message: string } | null {
-  if (!stderr) return null
-
-  // 模式 1：JSON 错误格式 - "401 {...}"
-  const jsonMatch = stderr.match(/(\d{3})\s+(\{[^}]*"error"[^}]*\})/s)
-  if (jsonMatch) {
-    try {
-      const statusCode = parseInt(jsonMatch[1]!)
-      const errorObj = JSON.parse(jsonMatch[2]!)
-      const message = errorObj.error?.message || errorObj.message || '未知错误'
-      return { statusCode, message }
-    } catch {
-      // JSON 解析失败，继续尝试其他模式
-    }
-  }
-
-  // 模式 2：API error 格式 - "API error (attempt X/Y): 401 401 {...}"
-  const apiErrorMatch = stderr.match(/API error[^:]*:\s+(\d{3})\s+\d{3}\s+(\{.*?\})/s)
-  if (apiErrorMatch) {
-    try {
-      const statusCode = parseInt(apiErrorMatch[1]!)
-      const errorObj = JSON.parse(apiErrorMatch[2]!)
-      const message = errorObj.error?.message || errorObj.message || '未知错误'
-      return { statusCode, message }
-    } catch {
-      // JSON 解析失败
-    }
-  }
-
-  // 模式 3：直接的状态码 + 消息
-  const simpleMatch = stderr.match(/(\d{3})[:\s]+(.+?)(?:\n|$)/i)
-  if (simpleMatch) {
-    const statusCode = parseInt(simpleMatch[1]!)
-    const message = simpleMatch[2]!.trim()
-    if (statusCode >= 400 && statusCode < 600) {
-      return { statusCode, message }
-    }
-  }
-
-  return null
-}
-
-// ===== 自动重试工具函数 =====
-
-/** 可自动重试的 TypedError 错误码 */
-const AUTO_RETRYABLE_ERROR_CODES: ReadonlySet<string> = new Set([
-  'rate_limited',
-  'provider_error',      // overloaded 映射为 provider_error
-  'service_error',
-  'service_unavailable',
-  'network_error',
-])
-
-/** 判断 typed_error 事件是否可自动重试 */
-function isAutoRetryableTypedError(error: TypedError): boolean {
-  return AUTO_RETRYABLE_ERROR_CODES.has(error.code)
-}
-
-/** 判断 catch 块中的 API 错误是否可自动重试（HTTP 429 / 5xx / 已知可恢复错误模式） */
-function isAutoRetryableCatchError(
-  apiError: { statusCode: number; message: string } | null,
-  rawErrorMessage?: string,
-): boolean {
-  if (apiError) {
-    if (apiError.statusCode === 429 || apiError.statusCode >= 500) return true
-  }
-  // 已知的可恢复错误模式（无 HTTP 状态码但可重试）
-  if (rawErrorMessage) {
-    if (rawErrorMessage.includes('context_management')) return true
-  }
-  return false
-}
-
-/** 最大自动重试次数 */
-const MAX_AUTO_RETRIES = 3
-
-/** 计算重试延迟（指数退避：1s, 2s, 4s） */
-function getRetryDelayMs(attempt: number): number {
-  return Math.min(1000 * Math.pow(2, attempt - 1), 8000)
-}
-
-/**
- * 可中断的定时器
- *
- * 等待指定毫秒，如果 signal 被中止则立即 resolve。
- */
-function timerWithAbort(ms: number, signal: AbortSignal): Promise<void> {
-  return new Promise<void>((resolve) => {
-    if (signal.aborted) { resolve(); return }
-    const tid = setTimeout(resolve, ms)
-    signal.addEventListener('abort', () => { clearTimeout(tid); resolve() }, { once: true })
-  })
-}
+// 纯逻辑工具函数已提取到 agent-orchestrator-utils.ts，此处通过 import 引入
 
 /**
  * 解析 SDK cli.js 路径
@@ -292,31 +203,7 @@ function ensureRipgrepAvailable(cliPath: string): void {
 /** 最大回填消息条数 */
 const MAX_CONTEXT_MESSAGES = 20
 
-/** 单条工具摘要最大字符数 */
-const MAX_TOOL_SUMMARY_LENGTH = 200
-
-/**
- * 从 assistant 消息的 events 中提取工具活动摘要
- *
- * 返回简要的工具名称 + 关键输入信息，帮助新 SDK 会话理解之前做过什么。
- */
-function extractToolSummary(events: import('@proma/shared').AgentEvent[]): string {
-  const summaries: string[] = []
-  for (const event of events) {
-    if (event.type === 'tool_start') {
-      const input = event.input
-      // 提取关键输入参数（如 file_path、command 等）
-      const keyParam = input.file_path ?? input.command ?? input.path ?? input.query ?? ''
-      const paramStr = keyParam ? `: ${String(keyParam).slice(0, 100)}` : ''
-      summaries.push(`[tool: ${event.toolName}${paramStr}]`)
-    }
-  }
-  if (summaries.length === 0) return ''
-  const joined = summaries.join(' ')
-  return joined.length > MAX_TOOL_SUMMARY_LENGTH
-    ? joined.slice(0, MAX_TOOL_SUMMARY_LENGTH) + '...'
-    : joined
-}
+// extractToolSummary / MAX_TOOL_SUMMARY_LENGTH 已从 agent-orchestrator-utils.ts 导入
 
 /**
  * 构建带历史上下文的 prompt
@@ -495,7 +382,7 @@ export class AgentOrchestrator {
     mcpServers: Record<string, Record<string, unknown>>,
   ): Promise<void> {
     const memoryConfig = getMemoryConfig()
-    const memUserId = memoryConfig.userId?.trim() || 'proma-user'
+    const memUserId = memoryConfig.userId?.trim() || 'xwom-user'
     if (!memoryConfig.enabled || !memoryConfig.apiKey) return
 
     try {
@@ -748,7 +635,7 @@ export class AgentOrchestrator {
     let agentExec: { type: 'node' | 'bun'; path: string } | undefined
     let agentCwd: string | undefined
     let workspaceSlug: string | undefined
-    let workspace: import('@proma/shared').AgentWorkspace | undefined
+    let workspace: import('@xwom/shared').AgentWorkspace | undefined
 
     try {
       // 8. 动态导入 SDK
@@ -839,7 +726,7 @@ export class AgentOrchestrator {
         const toolLines: string[] = ['用户在消息中明确引用了以下工具，请在本次回复中主动调用：']
         for (const slug of mentionedSkills ?? []) {
           const qualifiedName = workspaceSlug
-            ? `proma-workspace-${workspaceSlug}:${slug}`
+            ? `xwom-workspace-${workspaceSlug}:${slug}`
             : slug
           toolLines.push(`- Skill: ${qualifiedName}（请立即调用此 Skill）`)
         }
@@ -867,7 +754,7 @@ export class AgentOrchestrator {
 
       // 12. 读取应用设置 + 获取权限模式
       const appSettings = getSettings()
-      const permissionMode: PromaPermissionMode = permissionModeOverride
+      const permissionMode: XwomPermissionMode = permissionModeOverride
         ?? (workspaceSlug
           ? getWorkspacePermissionMode(workspaceSlug)
           : (appSettings.agentPermissionMode ?? 'smart'))

@@ -2,8 +2,8 @@
  * Agent 工作区管理器
  *
  * 负责 Agent 工作区的 CRUD 操作。
- * - 工作区索引：~/.proma/agent-workspaces.json（轻量元数据）
- * - 工作区目录：~/.proma/agent-workspaces/{slug}/（Agent 的 cwd）
+ * - 工作区索引：~/.xwom/agent-workspaces.json（轻量元数据）
+ * - 工作区目录：~/.xwom/agent-workspaces/{slug}/（Agent 的 cwd）
  *
  * 照搬 agent-session-manager.ts 的 readIndex/writeIndex 模式。
  */
@@ -19,7 +19,7 @@ import {
   getInactiveSkillsDir,
   getDefaultSkillsDir,
 } from './config-paths'
-import type { AgentWorkspace, McpServerEntry, WorkspaceMcpConfig, SkillMeta, WorkspaceCapabilities, PromaPermissionMode } from '@proma/shared'
+import type { AgentWorkspace, McpServerEntry, WorkspaceMcpConfig, SkillMeta, WorkspaceCapabilities, XwomPermissionMode } from '@xwom/shared'
 
 /**
  * 工作区索引文件格式
@@ -113,7 +113,7 @@ export function getAgentWorkspace(id: string): AgentWorkspace | undefined {
 /**
  * 将默认 Skills 模板复制到工作区 skills/ 目录
  *
- * 从 ~/.proma/default-skills/ 复制所有内容。
+ * 从 ~/.xwom/default-skills/ 复制所有内容。
  * 如果模板目录不存在或为空则跳过。
  */
 function copyDefaultSkills(workspaceSlug: string): void {
@@ -270,7 +270,7 @@ export function ensurePluginManifest(workspaceSlug: string, workspaceName: strin
   }
 
   const manifest = {
-    name: `proma-workspace-${workspaceSlug}`,
+    name: `xwom-workspace-${workspaceSlug}`,
     version: '1.0.0',
   }
 
@@ -469,7 +469,7 @@ export function toggleWorkspaceSkill(workspaceSlug: string, skillSlug: string, e
 
 /** 工作区配置文件格式 */
 interface WorkspaceConfig {
-  permissionMode?: PromaPermissionMode
+  permissionMode?: XwomPermissionMode
   attachedDirectories?: string[]
 }
 
@@ -511,7 +511,7 @@ function writeWorkspaceConfig(workspaceSlug: string, config: WorkspaceConfig): v
  *
  * 默认返回 'smart'（智能模式）。
  */
-export function getWorkspacePermissionMode(workspaceSlug: string): PromaPermissionMode {
+export function getWorkspacePermissionMode(workspaceSlug: string): XwomPermissionMode {
   const config = readWorkspaceConfig(workspaceSlug)
   return config.permissionMode ?? 'smart'
 }
@@ -519,7 +519,7 @@ export function getWorkspacePermissionMode(workspaceSlug: string): PromaPermissi
 /**
  * 设置工作区权限模式
  */
-export function setWorkspacePermissionMode(workspaceSlug: string, mode: PromaPermissionMode): void {
+export function setWorkspacePermissionMode(workspaceSlug: string, mode: XwomPermissionMode): void {
   const config = readWorkspaceConfig(workspaceSlug)
   const updated: WorkspaceConfig = { ...config, permissionMode: mode }
   writeWorkspaceConfig(workspaceSlug, updated)

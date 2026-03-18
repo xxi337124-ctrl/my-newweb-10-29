@@ -74,7 +74,8 @@ export function hasDangerousStructure(command: string): boolean {
   // 输出重定向
   if (/>{1,2}/.test(command)) return true
   // find -exec / -delete（可执行任意命令/删除文件）
-  if (/\b-exec\b/.test(command) || /\b-delete\b/.test(command)) return true
+  // 注意：-exec/-delete 前通常是空格，\b 在 `-` 前要求 word char，所以改用 (?<=\s)
+  if (/(?:^|\s)-exec\b/.test(command) || /(?:^|\s)-delete\b/.test(command)) return true
   // 命令链接操作符（&&、;）
   if (/[;&]/.test(command)) return true
   // 子 shell / 命令替换（$(...) 和反引号）

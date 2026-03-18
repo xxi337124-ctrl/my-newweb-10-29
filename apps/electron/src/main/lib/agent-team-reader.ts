@@ -17,7 +17,7 @@ import type {
   TaskItem,
   ParsedMailboxMessage,
   AgentTeamData,
-} from '@proma/shared'
+} from '@xwom/shared'
 
 const TEAMS_DIR = join(homedir(), '.claude', 'teams')
 const TASKS_DIR = join(homedir(), '.claude', 'tasks')

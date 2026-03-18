@@ -6,7 +6,7 @@
 
 import { execSync, spawnSync } from 'child_process'
 import { existsSync } from 'fs'
-import type { NodeRuntimeStatus } from '@proma/shared'
+import type { NodeRuntimeStatus } from '@xwom/shared'
 
 /**
  * 从系统 PATH 查找 Node.js

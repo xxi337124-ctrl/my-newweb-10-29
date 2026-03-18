@@ -22,7 +22,7 @@ description: 交互式创建和管理 Chat 模式的自定义 HTTP 工具。当�
 
 ### 2. 构建配置
 
-根据收集的信息构建工具配置 JSON。配置文件位于 `~/.proma/chat-tools.json`。
+根据收集的信息构建工具配置 JSON。配置文件位于 `~/.xwom/chat-tools.json`。
 
 #### 配置文件结构
 
@@ -90,7 +90,7 @@ description: 交互式创建和管理 Chat 模式的自定义 HTTP 工具。当�
 ### 3. 写入配置
 
 操作步骤：
-1. 读取 `~/.proma/chat-tools.json`（如不存在则创建）
+1. 读取 `~/.xwom/chat-tools.json`（如不存在则创建）
 2. 将新工具追加到 `customTools` 数组（按 `id` 去重）
 3. 在 `toolStates` 中添加 `{ "enabled": true }` 使其默认启用
 4. 写回文件（保持 JSON 格式化）

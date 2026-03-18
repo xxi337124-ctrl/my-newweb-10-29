@@ -33,7 +33,7 @@ import {
 } from '@/atoms/notifications'
 import { tabsAtom, updateTabTitle } from '@/atoms/tab-atoms'
 import type { AgentStreamState } from '@/atoms/agent-atoms'
-import type { AgentStreamEvent, AgentStreamCompletePayload } from '@proma/shared'
+import type { AgentStreamEvent, AgentStreamCompletePayload } from '@xwom/shared'
 
 export function useGlobalAgentListeners(): void {
   const store = useStore()

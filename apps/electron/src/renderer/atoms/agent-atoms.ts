@@ -7,7 +7,7 @@
 
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
-import type { AgentSessionMeta, AgentMessage, AgentEvent, AgentWorkspace, AgentPendingFile, RetryAttempt, PromaPermissionMode, PermissionRequest, AskUserRequest, ThinkingConfig, AgentEffort, TaskUsage, AgentTeamData } from '@proma/shared'
+import type { AgentSessionMeta, AgentMessage, AgentEvent, AgentWorkspace, AgentPendingFile, RetryAttempt, XwomPermissionMode, PermissionRequest, AskUserRequest, ThinkingConfig, AgentEffort, TaskUsage, AgentTeamData } from '@xwom/shared'
 
 /** 活动状态 */
 export type ActivityStatus = 'pending' | 'running' | 'completed' | 'error' | 'backgrounded'
@@ -679,7 +679,7 @@ export const teamOverviewAtom = atom<TeamOverview | null>((get) => {
 // ===== 权限系统 Atoms =====
 
 /** 当前工作区权限模式 */
-export const agentPermissionModeAtom = atom<PromaPermissionMode>('smart')
+export const agentPermissionModeAtom = atom<XwomPermissionMode>('smart')
 
 /** Agent 思考模式 */
 export const agentThinkingAtom = atom<ThinkingConfig | undefined>(undefined)

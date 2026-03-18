@@ -46,7 +46,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
 import { workspaceFilesVersionAtom } from '@/atoms/agent-atoms'
-import type { FileEntry } from '@proma/shared'
+import type { FileEntry } from '@xwom/shared'
 
 interface FileBrowserProps {
   rootPath: string

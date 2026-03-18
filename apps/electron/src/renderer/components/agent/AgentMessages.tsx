@@ -25,7 +25,7 @@ import {
 } from '@/components/ai-elements/conversation'
 import { ScrollMinimap } from '@/components/ai-elements/scroll-minimap'
 import type { MinimapItem } from '@/components/ai-elements/scroll-minimap'
-import { useSmoothStream } from '@proma/ui'
+import { useSmoothStream } from '@xwom/ui'
 import { UserAvatar } from '@/components/chat/UserAvatar'
 import { CopyButton } from '@/components/chat/CopyButton'
 import { formatMessageTime } from '@/components/chat/ChatMessageItem'
@@ -36,7 +36,7 @@ import { BackgroundTasksPanel } from './BackgroundTasksPanel'
 import { useBackgroundTasks } from '@/hooks/useBackgroundTasks'
 import { userProfileAtom } from '@/atoms/user-profile'
 import { cn } from '@/lib/utils'
-import type { AgentMessage, RetryAttempt } from '@proma/shared'
+import type { AgentMessage, RetryAttempt } from '@xwom/shared'
 import type { ToolActivity, AgentStreamState } from '@/atoms/agent-atoms'
 
 /** AgentMessages 属性接口 */

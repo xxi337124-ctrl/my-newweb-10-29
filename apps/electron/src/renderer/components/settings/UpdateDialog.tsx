@@ -8,7 +8,7 @@
 import * as React from 'react'
 import { useAtomValue } from 'jotai'
 import { ExternalLink } from 'lucide-react'
-import type { GitHubRelease } from '@proma/shared'
+import type { GitHubRelease } from '@xwom/shared'
 import {
   AlertDialog,
   AlertDialogContent,
@@ -22,7 +22,7 @@ import {
 import { updateStatusAtom } from '@/atoms/updater'
 import { ReleaseNotesViewer } from './ReleaseNotesViewer'
 
-const GITHUB_RELEASES_URL = 'https://github.com/ErlichLiu/Proma/releases'
+const GITHUB_RELEASES_URL = 'https://github.com/ErlichLiu/Xwom/releases'
 
 export function UpdateDialog(): React.ReactElement | null {
   const updateStatus = useAtomValue(updateStatusAtom)

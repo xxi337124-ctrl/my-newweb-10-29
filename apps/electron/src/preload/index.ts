@@ -6,7 +6,7 @@
  */
 
 import { contextBridge, ipcRenderer } from 'electron'
-import { IPC_CHANNELS, CHANNEL_IPC_CHANNELS, CHAT_IPC_CHANNELS, AGENT_IPC_CHANNELS, ENVIRONMENT_IPC_CHANNELS, PROXY_IPC_CHANNELS, GITHUB_RELEASE_IPC_CHANNELS, SYSTEM_PROMPT_IPC_CHANNELS, MEMORY_IPC_CHANNELS, CHAT_TOOL_IPC_CHANNELS, FEISHU_IPC_CHANNELS } from '@proma/shared'
+import { IPC_CHANNELS, CHANNEL_IPC_CHANNELS, CHAT_IPC_CHANNELS, AGENT_IPC_CHANNELS, ENVIRONMENT_IPC_CHANNELS, PROXY_IPC_CHANNELS, GITHUB_RELEASE_IPC_CHANNELS, SYSTEM_PROMPT_IPC_CHANNELS, MEMORY_IPC_CHANNELS, CHAT_TOOL_IPC_CHANNELS, FEISHU_IPC_CHANNELS } from '@xwom/shared'
 import { USER_PROFILE_IPC_CHANNELS, SETTINGS_IPC_CHANNELS } from '../types'
 import type {
   RuntimeStatus,
@@ -57,7 +57,7 @@ import type {
   GitHubReleaseListOptions,
   PermissionRequest,
   PermissionResponse,
-  PromaPermissionMode,
+  XwomPermissionMode,
   AskUserRequest,
   AskUserResponse,
   SystemPromptConfig,
@@ -79,7 +79,7 @@ import type {
   FeishuNotifyMode,
   FeishuNotificationSentPayload,
   FeishuUpdateBindingInput,
-} from '@proma/shared'
+} from '@xwom/shared'
 import type { UserProfile, AppSettings } from '../types'
 
 /**
@@ -334,7 +334,7 @@ export interface ElectronAPI {
   saveWorkspaceMcpConfig: (workspaceSlug: string, config: WorkspaceMcpConfig) => Promise<void>
 
   /** 测试 MCP 服务器连接 */
-  testMcpServer: (name: string, entry: import('@proma/shared').McpServerEntry) => Promise<{ success: boolean; message: string }>
+  testMcpServer: (name: string, entry: import('@xwom/shared').McpServerEntry) => Promise<{ success: boolean; message: string }>
 
   /** 获取工作区 Skill 列表（含活跃和不活跃） */
   getWorkspaceSkills: (workspaceSlug: string) => Promise<SkillMeta[]>
@@ -366,10 +366,10 @@ export interface ElectronAPI {
   respondPermission: (response: PermissionResponse) => Promise<void>
 
   /** 获取工作区权限模式 */
-  getPermissionMode: (workspaceSlug: string) => Promise<PromaPermissionMode>
+  getPermissionMode: (workspaceSlug: string) => Promise<XwomPermissionMode>
 
   /** 设置工作区权限模式 */
-  setPermissionMode: (workspaceSlug: string, mode: PromaPermissionMode) => Promise<void>
+  setPermissionMode: (workspaceSlug: string, mode: XwomPermissionMode) => Promise<void>
 
   /** 获取全局记忆配置 */
   getMemoryConfig: () => Promise<MemoryConfig>
@@ -885,7 +885,7 @@ const electronAPI: ElectronAPI = {
     return ipcRenderer.invoke(AGENT_IPC_CHANNELS.SAVE_MCP_CONFIG, workspaceSlug, config)
   },
 
-  testMcpServer: (name: string, entry: import('@proma/shared').McpServerEntry) => {
+  testMcpServer: (name: string, entry: import('@xwom/shared').McpServerEntry) => {
     return ipcRenderer.invoke(AGENT_IPC_CHANNELS.TEST_MCP_SERVER, name, entry) as Promise<{ success: boolean; message: string }>
   },
 
@@ -939,7 +939,7 @@ const electronAPI: ElectronAPI = {
     return ipcRenderer.invoke(AGENT_IPC_CHANNELS.GET_PERMISSION_MODE, workspaceSlug)
   },
 
-  setPermissionMode: (workspaceSlug: string, mode: PromaPermissionMode) => {
+  setPermissionMode: (workspaceSlug: string, mode: XwomPermissionMode) => {
     return ipcRenderer.invoke(AGENT_IPC_CHANNELS.SET_PERMISSION_MODE, workspaceSlug, mode)
   },
 
