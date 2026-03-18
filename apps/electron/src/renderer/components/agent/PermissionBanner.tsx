@@ -13,7 +13,7 @@ import { useAtom } from 'jotai'
 import { Shield, ShieldAlert, Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { allPendingPermissionRequestsAtom } from '@/atoms/agent-atoms'
-import type { DangerLevel } from '@proma/shared'
+import type { DangerLevel } from '@xwom/shared'
 
 /** 危险等级对应的图标颜色 */
 const DANGER_ICON_STYLES: Record<DangerLevel, string> = {

@@ -14,7 +14,7 @@ import {
   CollapsibleContent,
 } from '@/components/ui/collapsible'
 import { MessageResponse } from '@/components/ai-elements/message'
-import type { ChatToolActivity } from '@proma/shared'
+import type { ChatToolActivity } from '@xwom/shared'
 import { cn } from '@/lib/utils'
 
 /** 工具名称到中文标签的映射 */

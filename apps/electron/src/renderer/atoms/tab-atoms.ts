@@ -77,7 +77,7 @@ export const splitLayoutAtom = atom<SplitLayoutState>(DEFAULT_SPLIT_LAYOUT)
 
 /** 侧边栏是否收起（持久化） */
 export const sidebarCollapsedAtom = atomWithStorage<boolean>(
-  'proma-sidebar-collapsed',
+  'xwom-sidebar-collapsed',
   false,
 )
 

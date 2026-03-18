@@ -11,9 +11,9 @@ import { useAtom } from 'jotai'
 import { Plus, Pencil, Trash2, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import { PROVIDER_LABELS } from '@proma/shared'
-import type { Channel } from '@proma/shared'
-import { getChannelLogo, PromaLogo } from '@/lib/model-logo'
+import { PROVIDER_LABELS } from '@xwom/shared'
+import type { Channel } from '@xwom/shared'
+import { getChannelLogo, XwomLogo } from '@/lib/model-logo'
 import { agentChannelIdAtom, agentModelIdAtom } from '@/atoms/agent-atoms'
 import { SettingsSection, SettingsCard, SettingsRow } from './primitives'
 import { ChannelForm } from './ChannelForm'
@@ -167,7 +167,7 @@ export function ChannelSettings(): React.ReactElement {
         }
       >
         <SettingsCard>
-          <PromaProviderCard />
+          <XwomProviderCard />
         </SettingsCard>
         {loading ? (
           <div className="text-sm text-muted-foreground py-8 text-center">加载中...</div>
@@ -201,7 +201,7 @@ export function ChannelSettings(): React.ReactElement {
         description="选择 Agent 模式的默认供应商，上方已启用的 Anthropic 兼容渠道会自动出现在此列表"
       >
         <SettingsCard>
-          <PromaProviderCard />
+          <XwomProviderCard />
         </SettingsCard>
         {loading ? (
           <div className="text-sm text-muted-foreground py-8 text-center">加载中...</div>
@@ -323,18 +323,18 @@ function AgentProviderRow({ channel, selected, onSelect }: AgentProviderRowProps
   )
 }
 
-// ===== Proma 官方供应商推广卡片 =====
+// ===== Xwom 官方供应商推广卡片 =====
 
-function PromaProviderCard(): React.ReactElement {
+function XwomProviderCard(): React.ReactElement {
   const handleDownload = (): void => {
-    window.open('http://proma.cool/download', '_blank')
+    window.open('http://xwom.cool/download', '_blank')
   }
 
   return (
     <SettingsRow
-      label="Proma"
-      icon={<img src={PromaLogo} alt="Proma" className="w-8 h-8 rounded" />}
-      description="Proma 官方供应｜稳定｜靠谱｜丝滑｜简单｜优惠套餐｜可用于 Agent"
+      label="Xwom"
+      icon={<img src={XwomLogo} alt="Xwom" className="w-8 h-8 rounded" />}
+      description="Xwom 官方供应｜稳定｜靠谱｜丝滑｜简单｜优惠套餐｜可用于 Agent"
     >
       <Button size="sm" variant="outline" className="gap-1.5" onClick={handleDownload}>
         <ExternalLink size={13} />

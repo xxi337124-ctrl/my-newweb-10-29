@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react'
 import { useSetAtom } from 'jotai'
 import { RefreshCw, Info, GraduationCap } from 'lucide-react'
-import type { EnvironmentCheckResult } from '@proma/shared'
+import type { EnvironmentCheckResult } from '@xwom/shared'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
@@ -115,7 +115,7 @@ export function OnboardingView({ onComplete }: OnboardingViewProps) {
     <div className="flex h-screen flex-col items-center justify-center bg-gradient-to-br from-background via-background to-muted/20 p-8">
       {/* 顶部区域 */}
       <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold mb-4">欢迎使用 Proma</h1>
+        <h1 className="text-4xl font-bold mb-4">欢迎使用 Xwom</h1>
         <p className="text-lg text-muted-foreground">
           让我们先检查运行环境，确保 Agent 模式正常工作
         </p>
@@ -169,7 +169,7 @@ export function OnboardingView({ onComplete }: OnboardingViewProps) {
           </div>
           <div className="flex-1">
             <h3 className="text-sm font-semibold text-foreground">查看使用教程</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">了解 Proma 的全部功能和使用技巧</p>
+            <p className="text-xs text-muted-foreground mt-0.5">了解 Xwom 的全部功能和使用技巧</p>
           </div>
         </button>
       </div>
@@ -229,7 +229,7 @@ export function OnboardingView({ onComplete }: OnboardingViewProps) {
           <SheetHeader className="px-6 pt-6 pb-4 border-b">
             <SheetTitle className="flex items-center gap-2">
               <GraduationCap size={18} className="text-primary" />
-              Proma 使用教程
+              Xwom 使用教程
             </SheetTitle>
           </SheetHeader>
           <ScrollArea className="h-[calc(100vh-80px)]">

@@ -49,7 +49,7 @@ import type {
   ChatSendInput,
   FileAttachment,
   AttachmentSaveInput,
-} from '@proma/shared'
+} from '@xwom/shared'
 
 interface ChatViewProps {
   conversationId: string

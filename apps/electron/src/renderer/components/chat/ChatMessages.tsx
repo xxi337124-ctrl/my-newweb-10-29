@@ -41,11 +41,11 @@ import {
   ReasoningTrigger,
   ReasoningContent,
 } from '@/components/ai-elements/reasoning'
-import { useSmoothStream } from '@proma/ui'
+import { useSmoothStream } from '@xwom/ui'
 import { useConversationParallelMode } from '@/hooks/useConversationSettings'
 import { getModelLogo } from '@/lib/model-logo'
 import { userProfileAtom } from '@/atoms/user-profile'
-import type { ChatMessage, ChatToolActivity } from '@proma/shared'
+import type { ChatMessage, ChatToolActivity } from '@xwom/shared'
 
 // ===== 滚动到顶部加载更多 =====
 

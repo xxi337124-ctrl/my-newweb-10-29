@@ -2,7 +2,7 @@
  * Claude Agent SDK 适配器
  *
  * 实现 AgentProviderAdapter 接口，将 Claude Agent SDK 的 SDKMessage 流
- * 翻译为 Proma 的 AgentEvent 流。所有 SDK 消息类型在此统一处理，
+ * 翻译为 Xwom 的 AgentEvent 流。所有 SDK 消息类型在此统一处理，
  * 不再有"一部分在这里翻译，一部分在外面翻译"的问题。
  */
 
@@ -17,14 +17,14 @@ import type {
   AgentDefinition,
   SdkBeta,
   JsonSchemaOutputFormat,
-} from '@proma/shared'
+} from '@xwom/shared'
 import {
   ToolIndex,
   extractToolStarts,
   extractToolResults,
   SUBAGENT_TOOL_NAMES,
   type ContentBlock,
-} from '@proma/shared'
+} from '@xwom/shared'
 import type { CanUseToolOptions, PermissionResult } from '../agent-permission-service'
 
 interface SDKAssistantMessage {
@@ -169,7 +169,7 @@ export interface ClaudeAgentQueryOptions extends AgentQueryInput {
 const FRIENDLY_ERROR_MESSAGES: Array<{ pattern: RegExp; message: string }> = [
   {
     pattern: /not logged in|please run \/login/i,
-    message: '请检查是否选择了正确的 Proma 供应渠道和模型',
+    message: '请检查是否选择了正确的 Xwom 供应渠道和模型',
   },
 ]
 

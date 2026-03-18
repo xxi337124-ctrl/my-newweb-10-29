@@ -1,40 +1,52 @@
 <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
   <!--
-    macOS Big Sur+ 图标规范:
-    - 画布: 1024x1024
-    - 圆角矩形: 824x824 居中 (边距 100px)
-    - 圆角: 185px (~22.5%)
+    Xwom App Icon - macOS Big Sur+ style
+    - Canvas: 1024x1024
+    - Rounded rect: 824x824 centered (margin 100px)
+    - Corner radius: 185px (~22.5%)
   -->
 
-  <!-- 变换：将原 800x800 内容缩放到 824x824 并居中 -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#4a0e78"/>
+    </linearGradient>
+    <linearGradient id="x-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f5d4"/>
+      <stop offset="100%" stop-color="#00bbf9"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
   <g transform="translate(100, 100) scale(1.03)">
-    <!-- macOS 风格圆角背景 -->
-    <rect width="800" height="800" rx="180" ry="180" fill="#000000"/>
+    <!-- macOS style rounded background -->
+    <rect width="800" height="800" rx="180" ry="180" fill="url(#bg-gradient)"/>
 
-    <!-- 从近到远逐渐缩小、透明的条纹 - 营造纵深感 -->
-    <g>
-      <!-- 第一层 - 最近，最实 -->
-      <rect x="150" y="350" width="90" height="400" rx="15" fill="#FFFFFF" opacity="1"/>
+    <!-- Neural network dots -->
+    <g opacity="0.3">
+      <circle cx="150" cy="150" r="4" fill="#00f5d4"/>
+      <circle cx="650" cy="120" r="3" fill="#00f5d4"/>
+      <circle cx="180" cy="650" r="3.5" fill="#00f5d4"/>
+      <circle cx="620" cy="680" r="4" fill="#00f5d4"/>
+      <circle cx="100" cy="400" r="2.5" fill="#00f5d4"/>
+      <circle cx="700" cy="400" r="3" fill="#00f5d4"/>
+      <line x1="150" y1="150" x2="280" y2="260" stroke="#00f5d4" stroke-width="1" opacity="0.5"/>
+      <line x1="650" y1="120" x2="520" y2="260" stroke="#00f5d4" stroke-width="1" opacity="0.5"/>
+      <line x1="180" y1="650" x2="280" y2="540" stroke="#00f5d4" stroke-width="1" opacity="0.5"/>
+      <line x1="620" y1="680" x2="520" y2="540" stroke="#00f5d4" stroke-width="1" opacity="0.5"/>
+    </g>
 
-      <!-- 第二层 - 渐远 -->
-      <rect x="270" y="320" width="80" height="360" rx="13" fill="#F0F0F0" opacity="0.85"
-            transform="rotate(-3 310 500)"/>
-
-      <!-- 第三层 - 更远 -->
-      <rect x="380" y="290" width="70" height="320" rx="11" fill="#E0E0E0" opacity="0.7"
-            transform="rotate(-6 415 450)"/>
-
-      <!-- 第四层 - 渐隐 -->
-      <rect x="480" y="260" width="60" height="280" rx="9" fill="#D0D0D0" opacity="0.55"
-            transform="rotate(-9 510 400)"/>
-
-      <!-- 第五层 - 远端 -->
-      <rect x="570" y="230" width="50" height="240" rx="7" fill="#C0C0C0" opacity="0.4"
-            transform="rotate(-12 595 350)"/>
-
-      <!-- 第六层 - 几乎消失 -->
-      <rect x="650" y="200" width="40" height="200" rx="5" fill="#B0B0B0" opacity="0.25"
-            transform="rotate(-15 670 300)"/>
+    <!-- Stylized X letter -->
+    <g filter="url(#glow)" transform="translate(400, 400)">
+      <!-- X shape - two crossing strokes -->
+      <path d="M-150,-160 L-80,-160 L0,-30 L80,-160 L150,-160 L40,0 L150,160 L80,160 L0,30 L-80,160 L-150,160 L-40,0 Z"
+            fill="url(#x-gradient)" opacity="0.95"/>
     </g>
   </g>
 </svg>

@@ -325,7 +325,7 @@ export type AgentEvent =
 /**
  * Agent 会话轻量索引项
  *
- * 存储在 ~/.proma/agent-sessions.json 中，
+ * 存储在 ~/.xwom/agent-sessions.json 中，
  * 类似 ConversationMeta，独立存储。
  */
 export interface AgentSessionMeta {
@@ -352,7 +352,7 @@ export interface AgentSessionMeta {
 /**
  * Agent 持久化消息
  *
- * 存储在 ~/.proma/agent-sessions/{id}.jsonl 中。
+ * 存储在 ~/.xwom/agent-sessions/{id}.jsonl 中。
  */
 export interface AgentMessage {
   /** 消息唯一标识 */
@@ -468,7 +468,7 @@ export interface AgentSendInput {
   /** 动态注入的 MCP 服务器（仅在本次会话中生效，如飞书群聊工具） */
   customMcpServers?: Record<string, Record<string, unknown>>
   /** 强制覆盖权限模式（飞书等无 UI 交互场景下强制 'auto'） */
-  permissionModeOverride?: PromaPermissionMode
+  permissionModeOverride?: XwomPermissionMode
   /** 用户通过 /skill:xxx 引用的 Skill slug 列表 */
   mentionedSkills?: string[]
   /** 用户通过 #mcp:xxx 引用的 MCP 服务器名称列表 */
@@ -664,11 +664,11 @@ export interface AskUserResponse {
 
 // ===== 权限系统类型 =====
 
-/** Proma 权限模式 */
-export type PromaPermissionMode = 'auto' | 'smart' | 'supervised'
+/** Xwom 权限模式 */
+export type XwomPermissionMode = 'auto' | 'smart' | 'supervised'
 
 /** 权限模式定义顺序（用于循环切换） */
-export const PROMA_PERMISSION_MODE_ORDER: readonly PromaPermissionMode[] = ['auto', 'smart', 'supervised']
+export const XWOM_PERMISSION_MODE_ORDER: readonly XwomPermissionMode[] = ['auto', 'smart', 'supervised']
 
 /** 危险等级 */
 export type DangerLevel = 'safe' | 'normal' | 'dangerous'

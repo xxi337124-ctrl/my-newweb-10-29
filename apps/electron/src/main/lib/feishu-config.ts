@@ -3,13 +3,13 @@
  *
  * 负责飞书 Bot 配置的 CRUD 操作、App Secret 加密/解密。
  * 使用 Electron safeStorage 进行加密（与渠道 API Key 相同模式）。
- * 数据持久化到 ~/.proma/feishu.json。
+ * 数据持久化到 ~/.xwom/feishu.json。
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { safeStorage } from 'electron'
 import { getFeishuConfigPath } from './config-paths'
-import type { FeishuConfig, FeishuConfigInput } from '@proma/shared'
+import type { FeishuConfig, FeishuConfigInput } from '@xwom/shared'
 
 /** 默认配置 */
 const DEFAULT_CONFIG: FeishuConfig = {

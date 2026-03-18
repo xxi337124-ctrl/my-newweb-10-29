@@ -5,7 +5,7 @@
  */
 
 import { atom } from 'jotai'
-import type { FeishuBridgeState, FeishuNotifyMode, FeishuChatBinding } from '@proma/shared'
+import type { FeishuBridgeState, FeishuNotifyMode, FeishuChatBinding } from '@xwom/shared'
 
 /** 飞书 Bridge 连接状态 */
 export const feishuBridgeStateAtom = atom<FeishuBridgeState>({

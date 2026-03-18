@@ -29,7 +29,7 @@ import { Input } from '@/components/ui/input'
 import {
   PROVIDER_DEFAULT_URLS,
   PROVIDER_LABELS,
-} from '@proma/shared'
+} from '@xwom/shared'
 import type {
   Channel,
   ChannelCreateInput,
@@ -37,7 +37,7 @@ import type {
   ChannelTestResult,
   FetchModelsResult,
   ProviderType,
-} from '@proma/shared'
+} from '@xwom/shared'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   SettingsSection,

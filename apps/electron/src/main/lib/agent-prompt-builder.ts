@@ -8,7 +8,7 @@
  * - 动态 per-message 上下文（buildDynamicContext）：注入到用户消息前，每次实时读取磁盘
  */
 
-import type { PromaPermissionMode } from '@proma/shared'
+import type { XwomPermissionMode } from '@xwom/shared'
 import { getUserProfile } from './user-profile-service'
 import { getWorkspaceMcpConfig, getWorkspaceSkills } from './agent-workspace-manager'
 import { getMemoryConfig } from './memory-service'
@@ -20,7 +20,7 @@ interface SystemPromptContext {
   workspaceName?: string
   workspaceSlug?: string
   sessionId: string
-  permissionMode: PromaPermissionMode
+  permissionMode: XwomPermissionMode
 }
 
 /**
@@ -36,12 +36,12 @@ export function buildSystemPromptAppend(ctx: SystemPromptContext): string {
   const sections: string[] = []
 
   // Agent 角色定义
-  sections.push(`## Proma Agent
+  sections.push(`## Xwom Agent
 
-你是 Proma Agent — 一个集成在 Proma 桌面应用中的通用AI助手，你有极强的自主性和主观能动性，由 Claude Agent SDK 驱动，你可以完成任何任务，并尽可能帮助用户完成更多的工作，尽最大的努力。
+你是 Xwom Agent — 一个集成在 Xwom 桌面应用中的通用AI助手，你有极强的自主性和主观能动性，由 Claude Agent SDK 驱动，你可以完成任何任务，并尽可能帮助用户完成更多的工作，尽最大的努力。
 
 **CRITICAL — Skill 调用规则：**
-调用 Skill 工具时，\`skill\` 参数**必须**使用含命名空间前缀的完整名称（如 \`proma-workspace-${ctx.workspaceSlug}:brainstorming\`）。
+调用 Skill 工具时，\`skill\` 参数**必须**使用含命名空间前缀的完整名称（如 \`xwom-workspace-${ctx.workspaceSlug}:brainstorming\`）。
 **绝对不可**使用不带前缀的短名称（如 \`brainstorming\`），否则会报 Unknown skill 错误。`)
 
   // 用户信息
@@ -54,9 +54,9 @@ export function buildSystemPromptAppend(ctx: SystemPromptContext): string {
     sections.push(`## 工作区
 
 - 工作区名称: ${ctx.workspaceName}
-- MCP 配置: ~/.proma/agent-workspaces/${ctx.workspaceSlug}/mcp.json
-- Skills 目录: ~/.proma/agent-workspaces/${ctx.workspaceSlug}/skills/
-- 会话目录: ~/.proma/agent-workspaces/${ctx.workspaceSlug}/sessions/${ctx.sessionId}/
+- MCP 配置: ~/.xwom/agent-workspaces/${ctx.workspaceSlug}/mcp.json
+- Skills 目录: ~/.xwom/agent-workspaces/${ctx.workspaceSlug}/skills/
+- 会话目录: ~/.xwom/agent-workspaces/${ctx.workspaceSlug}/sessions/${ctx.sessionId}/
 
 ### MCP 配置格式
 mcp.json 的顶层 key 必须是 \`servers\`（不是 mcpServers），示例：
@@ -118,7 +118,7 @@ description: 简要描述
 1. 优先使用中文回复，保留技术术语
 2. 确认破坏性操作后再执行
 3. 使用 Markdown 格式化输出
-4. 自称 Proma Agent`)
+4. 自称 Xwom Agent`)
 
   return sections.join('\n\n')
 }
@@ -179,7 +179,7 @@ export function buildDynamicContext(ctx: DynamicContext): string {
     // Skills 列表（SDK plugin 机制下 skill 名称带 plugin 前缀）
     const skills = getWorkspaceSkills(ctx.workspaceSlug)
     if (skills.length > 0) {
-      const pluginPrefix = `proma-workspace-${ctx.workspaceSlug}`
+      const pluginPrefix = `xwom-workspace-${ctx.workspaceSlug}`
       wsLines.push(`Skills（调用 Skill 工具时必须使用含前缀的完整名称，如 ${pluginPrefix}:skill-name，不可省略前缀）:`)
       for (const skill of skills) {
         const qualifiedName = `${pluginPrefix}:${skill.slug}`

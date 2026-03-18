@@ -41,11 +41,11 @@ import type { TabItem, SplitLayoutState } from './atoms/tab-atoms'
 import { chatToolsAtom } from './atoms/chat-tool-atoms'
 import { feishuBridgeStateAtom } from './atoms/feishu-atoms'
 import { currentConversationIdAtom } from './atoms/chat-atoms'
-import type { FeishuBridgeState, FeishuNotificationSentPayload } from '@proma/shared'
+import type { FeishuBridgeState, FeishuNotificationSentPayload } from '@xwom/shared'
 import { Toaster } from './components/ui/sonner'
 import { toast } from 'sonner'
-import { diffCapabilities } from '@proma/shared'
-import type { WorkspaceCapabilities } from '@proma/shared'
+import { diffCapabilities } from '@xwom/shared'
+import type { WorkspaceCapabilities } from '@xwom/shared'
 import { showCapabilityChangeToasts } from './lib/capabilities-toast'
 import { UpdateDialog } from './components/settings/UpdateDialog'
 import './styles/globals.css'
@@ -322,7 +322,7 @@ function FeishuInitializer(): null {
       })
       // 桌面通知
       if (Notification.permission === 'granted') {
-        new Notification('Proma → 飞书', {
+        new Notification('Xwom → 飞书', {
           body: `${payload.sessionTitle} 的回复已发送到飞书`,
         })
       }

@@ -14,14 +14,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-Proma 是一个集成通用 AI Agent 的下一代人工智能软件，采用 Electron 桌面应用架构。
+Xwom 是一个集成通用 AI Agent 的下一代人工智能软件，采用 Electron 桌面应用架构。
 
 ## Monorepo 结构
 
 Bun workspace monorepo：
 
 ```
-proma/
+xwom/
 ├── packages/
 │   ├── core/       # AI Provider 适配器、代码高亮服务 (Shiki)
 │   ├── shared/     # 共享类型、IPC 通道常量、配置、Agent 工具匹配
@@ -34,7 +34,7 @@ proma/
             └── renderer/   # React UI (Vite + Tailwind + ShadcnUI)
 ```
 
-**包命名规范**：`@proma/*` 作用域（`@proma/core`、`@proma/shared`、`@proma/ui`、`@proma/electron`）
+**包命名规范**：`@xwom/*` 作用域（`@xwom/core`、`@xwom/shared`、`@xwom/ui`、`@xwom/electron`）
 
 **依赖管理**：package.json 中使用 `workspace:*` 引用内部包
 
@@ -96,7 +96,7 @@ bun run generate:icons    # 生成应用图标
 
 类型定义 → 主进程处理 → Preload 桥接 → 渲染进程调用：
 
-1. **类型 & 常量**：`@proma/shared` 定义 IPC 通道名称常量和请求/响应类型
+1. **类型 & 常量**：`@xwom/shared` 定义 IPC 通道名称常量和请求/响应类型
 2. **主进程处理**：`main/ipc.ts` 注册 `ipcMain.handle()` 处理器，调用 `main/lib/` 服务
 3. **Preload 桥接**：`preload/index.ts` 通过 `contextBridge.exposeInMainWorld` 暴露类型安全的 API
 4. **渲染进程**：通过 `window.electronAPI.*` 调用，Jotai atoms 中封装调用逻辑
@@ -118,7 +118,7 @@ bun run generate:icons    # 生成应用图标
 | `document-parser.ts` | 文档文本提取（PDF/Office/文本文件） |
 | `user-profile-service.ts` | 用户档案持久化 |
 | `settings-service.ts` | 应用设置持久化（主题等） |
-| `config-paths.ts` | `~/.proma/` 目录路径管理 |
+| `config-paths.ts` | `~/.xwom/` 目录路径管理 |
 | `runtime-init.ts` | Bun/Git 运行时检测（`bun-finder.ts`、`git-detector.ts`、`shell-env.ts`） |
 
 ### AI Provider 适配器（`packages/core/src/providers/`）
@@ -171,10 +171,10 @@ bun run generate:icons    # 生成应用图标
 | `AgentListenersInitializer` | 挂载 `useGlobalAgentListeners`，全局 Agent IPC 监听 |
 | `UpdaterInitializer` | 订阅主进程推送的自动更新状态变化事件 |
 
-### 本地文件存储（`~/.proma/`）
+### 本地文件存储（`~/.xwom/`）
 
 ```
-~/.proma/
+~/.xwom/
 ├── channels.json           # 渠道配置（API Key 经 safeStorage 加密）
 ├── conversations.json      # 对话索引（元数据，轻量）
 ├── conversations/          # 消息存储
@@ -212,7 +212,7 @@ bun run generate:icons    # 生成应用图标
     - dist/**/*
     - package.json
     - node_modules/@anthropic-ai/claude-agent-sdk/**/*
-    - "!node_modules/@proma/**"
+    - "!node_modules/@xwom/**"
   ```
 - 这样 SDK 会被复制到 `app/node_modules/@anthropic-ai/claude-agent-sdk`，与 dist 和 package.json 同级
 - Node.js 的模块解析会从 `app/dist/main.cjs` 向上查找，能正确找到 `app/node_modules/` 下的 SDK
@@ -269,14 +269,14 @@ bun run generate:icons    # 生成应用图标
 ### 关键设计
 
 - **SDK 调用**：`sdk.query({ prompt, options: { apiKey, model, permissionMode: 'bypassPermissions', allowDangerouslySkipPermissions: true, cwd, abortController } })`
-- **事件转换**：`convertSDKMessage()`（`@proma/shared`）将 SDK 原始消息转为统一的 `AgentEvent` 类型
+- **事件转换**：`convertSDKMessage()`（`@xwom/shared`）将 SDK 原始消息转为统一的 `AgentEvent` 类型
 - **工具匹配**：`packages/shared/src/agent/tool-matching.ts` — 无状态 `ToolIndex` + `extractToolStarts` / `extractToolResults` 解析工具调用
 - **状态管理**：`applyAgentEvent()` 纯函数更新 `AgentStreamState`，支持流式增量更新
 - **全局 IPC 监听**：`useGlobalAgentListeners`（`renderer/hooks/`）在 `main.tsx` 顶层挂载，通过 `useStore()` 直接操作 atoms，永不销毁。确保页面切换（如设置页）时流式输出、权限请求不丢失
 - **权限请求排队**：权限/AskUser 请求按 sessionId 入队到 Map atoms（`allPendingPermissionRequestsAtom` / `allPendingAskUserRequestsAtom`），不区分当前/后台会话，SDK Promise 等待用户回来响应
 - **工作区隔离**：每个工作区独立的 MCP Server 配置和 cwd，Agent 会话按工作区过滤
 
-### 共享类型（`@proma/shared`）
+### 共享类型（`@xwom/shared`）
 
 - `AgentEvent`：Agent 事件（text / tool_start / tool_result / done / error）
 - `AgentSessionMeta`：会话元数据（id / title / channelId / workspaceId）
@@ -294,4 +294,4 @@ bun run generate:icons    # 生成应用图标
 - **Agent SDK**：@anthropic-ai/claude-agent-sdk（[v1 文档](https://platform.claude.com/docs/en/agent-sdk/typescript)、[v2 文档](https://platform.claude.com/docs/en/agent-sdk/typescript-v2-preview)）
 - **MCP 集成**：Model Context Protocol 用于外部数据源
 - **凭证存储**：AES-256-GCM 加密
-- **配置位置**：`~/.proma/`（类似 `~/.craft-agent/`）
+- **配置位置**：`~/.xwom/`（类似 `~/.craft-agent/`）

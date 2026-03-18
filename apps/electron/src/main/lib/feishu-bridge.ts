@@ -24,8 +24,8 @@ import type {
   FeishuMessageContext,
   FeishuChatMessage,
   FeishuUpdateBindingInput,
-} from '@proma/shared'
-import { FEISHU_IPC_CHANNELS, AGENT_IPC_CHANNELS } from '@proma/shared'
+} from '@xwom/shared'
+import { FEISHU_IPC_CHANNELS, AGENT_IPC_CHANNELS } from '@xwom/shared'
 import { getFeishuConfig, getDecryptedAppSecret } from './feishu-config'
 import { agentEventBus, runAgentHeadless, stopAgent } from './agent-service'
 import { createAgentSession, listAgentSessions, getAgentSessionMeta } from './agent-session-manager'
@@ -768,14 +768,14 @@ class FeishuBridge {
     }
 
     if (!workspaceId) {
-      await this.sendMessage(chatId, '请先在 Proma 设置中创建工作区。')
+      await this.sendMessage(chatId, '请先在 Xwom 设置中创建工作区。')
       return
     }
 
-    // 渠道/模型：直接复用 Proma 应用当前设置
+    // 渠道/模型：直接复用 Xwom 应用当前设置
     const channelId = appSettings.agentChannelId
     if (!channelId) {
-      await this.sendMessage(chatId, '请先在 Proma Agent 设置中选择渠道。')
+      await this.sendMessage(chatId, '请先在 Xwom Agent 设置中选择渠道。')
       return
     }
 
@@ -1290,7 +1290,7 @@ class FeishuBridge {
     const sessions = await listAgentSessions()
     const session = sessions.find((s) => s.id === sessionId)
     const title = session?.title ?? '未命名会话'
-    const preview = '任务已完成，请在 Proma 中查看详情。'
+    const preview = '任务已完成，请在 Xwom 中查看详情。'
 
     // 发送通知卡片到飞书
     const card = buildNotificationCard(title, preview, [], 0)

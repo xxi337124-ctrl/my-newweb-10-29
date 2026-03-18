@@ -7,7 +7,7 @@
 
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import type { ConversationMeta, ChatMessage, FileAttachment, ChatToolActivity } from '@proma/shared'
+import type { ConversationMeta, ChatMessage, FileAttachment, ChatToolActivity } from '@xwom/shared'
 
 /** 选中的模型信息 */
 export interface SelectedModel {
@@ -119,7 +119,7 @@ export const streamingToolActivitiesAtom = atom<ChatToolActivity[]>(
 
 /** 选中的模型（持久化到 localStorage） */
 export const selectedModelAtom = atomWithStorage<SelectedModel | null>(
-  'proma-selected-model',
+  'xwom-selected-model',
   null,
 )
 
@@ -134,7 +134,7 @@ export const currentConversationAtom = atom<ConversationMeta | null>((get) => {
 
 /** 上下文长度（持久化到 localStorage，默认 20 轮） */
 export const contextLengthAtom = atomWithStorage<ContextLengthValue>(
-  'proma-context-length',
+  'xwom-context-length',
   20,
 )
 
@@ -143,7 +143,7 @@ export const parallelModeAtom = atom<boolean>(false)
 
 /** 思考模式（持久化到 localStorage） */
 export const thinkingEnabledAtom = atomWithStorage<boolean>(
-  'proma-thinking-enabled',
+  'xwom-thinking-enabled',
   false,
 )
 

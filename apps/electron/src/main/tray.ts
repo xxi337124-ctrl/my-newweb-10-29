@@ -10,7 +10,7 @@ let tray: Tray | null = null
  */
 function getTrayIconPath(): string {
   // resources 在 build:resources 阶段被复制到 dist/ 下，与 main.cjs 同级
-  const resourcesDir = join(__dirname, 'resources/proma-logos')
+  const resourcesDir = join(__dirname, 'resources/xwom-logos')
   return join(resourcesDir, 'iconTemplate.png')
 }
 
@@ -50,19 +50,19 @@ export function createTray(): Tray | null {
     tray = new Tray(image)
 
     // 设置 tooltip
-    tray.setToolTip('Proma')
+    tray.setToolTip('Xwom')
 
     // 创建右键菜单
     const contextMenu = Menu.buildFromTemplate([
       {
-        label: '显示 Proma',
+        label: '显示 Xwom',
         click: () => showMainWindow()
       },
       {
         type: 'separator'
       },
       {
-        label: '退出 Proma',
+        label: '退出 Xwom',
         click: () => {
           app.quit()
         }

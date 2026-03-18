@@ -8,7 +8,7 @@
 import * as React from 'react'
 import { Folder, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { FileIndexEntry } from '@proma/shared'
+import type { FileIndexEntry } from '@xwom/shared'
 
 export interface FileMentionListProps {
   items: FileIndexEntry[]

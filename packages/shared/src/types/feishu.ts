@@ -7,7 +7,7 @@
 
 // ===== 飞书 Bot 配置 =====
 
-/** 飞书 Bot 应用配置（持久化到 ~/.proma/feishu.json） */
+/** 飞书 Bot 应用配置（持久化到 ~/.xwom/feishu.json） */
 export interface FeishuConfig {
   /** 是否启用飞书集成 */
   enabled: boolean
@@ -56,13 +56,13 @@ export interface FeishuUpdateBindingInput {
   sessionId?: string
 }
 
-/** 飞书聊天 → Proma 会话绑定（内存态，不持久化） */
+/** 飞书聊天 → Xwom 会话绑定（内存态，不持久化） */
 export interface FeishuChatBinding {
   /** 飞书 chat_id（单聊或群聊） */
   chatId: string
   /** 飞书用户 open_id */
   userId: string
-  /** 绑定的 Proma 会话 ID */
+  /** 绑定的 Xwom 会话 ID */
   sessionId: string
   /** 绑定的工作区 ID */
   workspaceId: string

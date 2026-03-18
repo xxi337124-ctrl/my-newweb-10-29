@@ -31,7 +31,7 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
-import type { ParsedMailboxMessage, AgentTeamData, TaskItem } from '@proma/shared'
+import type { ParsedMailboxMessage, AgentTeamData, TaskItem } from '@xwom/shared'
 import {
   Users,
   Loader2,

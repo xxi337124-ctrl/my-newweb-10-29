@@ -269,7 +269,7 @@ interface McpContentBlock {
  * - string：普通文本结果
  * - Array<McpContentBlock>：包含 text / image 内容块
  *
- * 此函数在 JSON 序列化之前处理，避免 [PROMA_IMAGE_ATTACHMENT:...] 标记被转义、
+ * 此函数在 JSON 序列化之前处理，避免 [XWOM_IMAGE_ATTACHMENT:...] 标记被转义、
  * 以及 image 块的巨大 base64 数据被序列化到显示文本中。
  */
 function extractFromMcpContent(content: unknown): { text: string; images: AgentToolResultImage[] } {
@@ -292,7 +292,7 @@ function extractFromMcpContent(content: unknown): { text: string; images: AgentT
       textParts.push(block.text)
     }
     // 跳过 image 块（base64 数据不需要序列化到显示文本）
-    // 图片信息通过 text 块中的 [PROMA_IMAGE_ATTACHMENT:...] 标记携带
+    // 图片信息通过 text 块中的 [XWOM_IMAGE_ATTACHMENT:...] 标记携带
   }
 
   const rawText = textParts.join('\n')
@@ -323,7 +323,7 @@ interface ParsedToolResult {
 export function parseToolResultImages(raw: string): ParsedToolResult {
   const images: AgentToolResultImage[] = []
   const cleaned = raw.replace(
-    /\[PROMA_IMAGE_ATTACHMENT:(\{[^}]+\})\]/g,
+    /\[XWOM_IMAGE_ATTACHMENT:(\{[^}]+\})\]/g,
     (_, json: string) => {
       try {
         images.push(JSON.parse(json) as AgentToolResultImage)

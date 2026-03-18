@@ -5,7 +5,7 @@
  */
 
 import { atom } from 'jotai'
-import type { EnvironmentCheckResult } from '@proma/shared'
+import type { EnvironmentCheckResult } from '@xwom/shared'
 
 /**
  * 环境检测结果 Atom

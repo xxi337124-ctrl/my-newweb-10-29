@@ -39,7 +39,7 @@ import { SettingsRow } from './primitives/SettingsRow'
 import { feishuBridgeStateAtom, feishuBindingsAtom } from '@/atoms/feishu-atoms'
 import { agentWorkspacesAtom, agentSessionsAtom } from '@/atoms/agent-atoms'
 import { cn } from '@/lib/utils'
-import type { FeishuTestResult, FeishuChatBinding } from '@proma/shared'
+import type { FeishuTestResult, FeishuChatBinding } from '@xwom/shared'
 
 // ===== 常量 =====
 
@@ -332,7 +332,7 @@ function FeishuBindingsTab(): React.ReactElement {
     <div className="space-y-8">
       <SettingsSection
         title="绑定管理"
-        description="查看和管理飞书聊天与 Proma 工作区/会话的绑定关系"
+        description="查看和管理飞书聊天与 Xwom 工作区/会话的绑定关系"
         action={
           <Button
             size="sm"
@@ -515,7 +515,7 @@ function FeishuConfigTab(): React.ReactElement {
       {/* 连接状态 */}
       <SettingsSection
         title="飞书集成"
-        description="连接飞书机器人，在飞书中控制 Proma Agent"
+        description="连接飞书机器人，在飞书中控制 Xwom Agent"
       >
         <SettingsCard>
           <SettingsRow
@@ -725,7 +725,7 @@ function FeishuConfigTab(): React.ReactElement {
             {/* 提示 */}
             <div className="pl-7 p-3 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-400 text-xs">
               版本审核通过并发布后，在飞书中搜索机器人名称添加到聊天，
-              即可通过飞书向 Proma Agent 发送指令。
+              即可通过飞书向 Xwom Agent 发送指令。
             </div>
           </div>
         </SettingsCard>

@@ -4,30 +4,31 @@
  * 负责 Electron 特定的操作：
  * - 查找渠道、解密 API Key
  * - 管理 AbortController
- * - 调用 @proma/core 的 Provider 适配器系统
+ * - 调用 @xwom/core 的 Provider 适配器系统
  * - 桥接 StreamEvent → webContents.send()
  * - 持久化消息到 JSONL + 更新索引
  * - 模块化工具的 function calling 循环（通过 ChatToolRegistry + ChatToolExecutor）
  *
- * 纯逻辑（消息转换、SSE 解析、请求构建）已抽象到 @proma/core/providers。
+ * 纯逻辑（消息转换、SSE 解析、请求构建）已抽象到 @xwom/core/providers。
  */
 
 import { randomUUID } from 'node:crypto'
 import type { WebContents } from 'electron'
-import { CHAT_IPC_CHANNELS } from '@proma/shared'
-import type { ChatSendInput, ChatMessage, GenerateTitleInput, FileAttachment, ChatToolActivity } from '@proma/shared'
+import { CHAT_IPC_CHANNELS } from '@xwom/shared'
+import type { ChatSendInput, ChatMessage, GenerateTitleInput, FileAttachment, ChatToolActivity } from '@xwom/shared'
 import {
   getAdapter,
   streamSSE,
   fetchTitle,
-} from '@proma/core'
-import type { ImageAttachmentData, ContinuationMessage } from '@proma/core'
+} from '@xwom/core'
+import type { ImageAttachmentData, ContinuationMessage } from '@xwom/core'
 import { listChannels, decryptApiKey } from './channel-manager'
 import { appendMessage, updateConversationMeta, getConversationMessages } from './conversation-manager'
 import { readAttachmentAsBase64, isImageAttachment } from './attachment-service'
 import { extractTextFromAttachment, isDocumentAttachment } from './document-parser'
 import { getFetchFn } from './proxy-fetch'
 import { getEffectiveProxyUrl } from './proxy-settings-service'
+import { filterHistory } from './chat-service-utils'
 import { getEnabledTools } from './chat-tool-registry'
 import { executeToolCalls } from './chat-tool-executor'
 
@@ -126,57 +127,7 @@ async function enrichHistoryWithDocuments(
 }
 
 // ===== 上下文过滤 =====
-
-/**
- * 根据分隔线和上下文长度裁剪历史消息
- *
- * 三层过滤：
- * 1. 分隔线过滤：仅保留最后一个分隔线之后的消息
- * 2. 轮数裁剪：按轮数（user+assistant = 1 轮）限制历史
- * 3. contextLength === 'infinite' 或 undefined 时保留全部
- */
-function filterHistory(
-  messageHistory: ChatMessage[],
-  contextDividers?: string[],
-  contextLength?: number | 'infinite',
-): ChatMessage[] {
-  // 过滤掉空内容的助手消息，避免发送无效消息给 API
-  let filtered = messageHistory.filter(
-    (msg) => !(msg.role === 'assistant' && !msg.content.trim()),
-  )
-
-  // 分隔线过滤：仅保留最后一个分隔线之后的消息
-  if (contextDividers && contextDividers.length > 0) {
-    const lastDividerId = contextDividers[contextDividers.length - 1]
-    const dividerIndex = filtered.findIndex((msg) => msg.id === lastDividerId)
-    if (dividerIndex >= 0) {
-      filtered = filtered.slice(dividerIndex + 1)
-    }
-  }
-
-  // 上下文长度过滤：按轮数裁剪
-  if (typeof contextLength === 'number' && contextLength >= 0) {
-    if (contextLength === 0) {
-      return []
-    }
-    // 从后往前，收集 N 轮对话
-    const collected: ChatMessage[] = []
-    let roundCount = 0
-    for (let i = filtered.length - 1; i >= 0; i--) {
-      const msg = filtered[i] as ChatMessage
-      collected.unshift(msg)
-      // 每遇到一条 user 消息算一轮结束
-      if (msg.role === 'user') {
-        roundCount++
-        if (roundCount >= contextLength) break
-      }
-    }
-    return collected
-  }
-
-  // contextLength === 'infinite' 或 undefined 时保留全部
-  return filtered
-}
+// filterHistory 已提取到 chat-service-utils.ts，通过 import 引入
 
 // ===== 核心流式函数 =====
 

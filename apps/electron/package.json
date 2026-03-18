@@ -1,7 +1,7 @@
 {
-  "name": "@proma/electron",
-  "version": "0.7.3",
-  "description": "Proma next gen ai software with general agents - Electron App",
+  "name": "@xwom/electron",
+  "version": "0.7.4",
+  "description": "Xwom next gen ai software with general agents - Electron App",
   "main": "dist/main.cjs",
   "author": {
     "name": "ErlichLiu",
@@ -41,9 +41,9 @@
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@larksuiteoapi/node-sdk": "^1.59.0",
-    "@proma/core": "workspace:*",
-    "@proma/shared": "workspace:*",
-    "@proma/ui": "workspace:*",
+    "@xwom/core": "workspace:*",
+    "@xwom/shared": "workspace:*",
+    "@xwom/ui": "workspace:*",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-context-menu": "^2.2.16",
@@ -117,7 +117,7 @@
   "build": {
     "extends": "electron-builder.yml"
   },
-  "proma": {
+  "xwom": {
     "bun": {
       "version": "1.2.5"
     }

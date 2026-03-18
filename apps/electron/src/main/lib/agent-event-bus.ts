@@ -15,7 +15,7 @@
  * - 多 Agent 元数据注入（Phase 4）
  */
 
-import type { AgentEvent } from '@proma/shared'
+import type { AgentEvent } from '@xwom/shared'
 
 /** 事件监听器 */
 export type AgentEventHandler = (sessionId: string, event: AgentEvent) => void
